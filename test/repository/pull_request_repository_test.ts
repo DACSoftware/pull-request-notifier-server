@@ -394,7 +394,7 @@ describe("PullRequestRepository", () => {
             prTwo
         ];
 
-        const pullRequests = PullRequestRepository.findByUser(userName);
+        const pullRequests = PullRequestRepository.findByUserUuid(userName);
         expect(pullRequests).to.have.length(2);
         expect(pullRequests[0].author.username).to.eq(userName);
         expect(pullRequests[1].reviewers[0].user.username).to.eq(userName);
@@ -411,7 +411,7 @@ describe("PullRequestRepository", () => {
             prTwo
         ];
 
-        const pullRequests = PullRequestRepository.findByUser(userName);
+        const pullRequests = PullRequestRepository.findByUserUuid(userName);
         expect(pullRequests).to.have.length(2);
     });
 

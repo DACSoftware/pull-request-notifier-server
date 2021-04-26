@@ -27,7 +27,7 @@ export class PullRequestRepository extends AbstractRepository {
         return foundPullRequests;
     }
 
-    static findByReviewer(username: string): PullRequest[] {
+    static findByReviewer(userUuid: string): PullRequest[] {
         let foundPullRequests: PullRequest[] = [];
         for (let repositoryName in PullRequestRepository.pullRequests) {
             if (PullRequestRepository.pullRequests.hasOwnProperty(repositoryName)) {
@@ -35,7 +35,7 @@ export class PullRequestRepository extends AbstractRepository {
                     const reviewers = pr.reviewers;
                     for (let reviewerIndex = 0; reviewerIndex < reviewers.length; reviewerIndex++) {
                         const reviewer = reviewers[reviewerIndex];
-                        if (reviewer.user.username === username) {
+                        if (reviewer.user.uuid === userUuid) {
                             return true;
                         }
                     }
@@ -50,12 +50,12 @@ export class PullRequestRepository extends AbstractRepository {
         return foundPullRequests;
     }
 
-    static findByAuthor(username: string): PullRequest[] {
+    static findByAuthor(userUuid: string): PullRequest[] {
         let foundPullRequests: PullRequest[] = [];
         for (let repositoryName in PullRequestRepository.pullRequests) {
             if (PullRequestRepository.pullRequests.hasOwnProperty(repositoryName)) {
                 const prs = PullRequestRepository.pullRequests[repositoryName].filter((pr: PullRequest) => {
-                    return pr.hasOwnProperty('author') && pr.author.username === username;
+                    return pr.hasOwnProperty('author') && pr.author.uuid === userUuid;
                 });
                 foundPullRequests = foundPullRequests.concat(prs);
             }
@@ -64,8 +64,8 @@ export class PullRequestRepository extends AbstractRepository {
         return foundPullRequests;
     }
 
-    static findByUser(username: string): PullRequest[] {
-        const result = this.findByAuthor(username).concat(this.findByReviewer(username));
+    static findByUserUuid(userUuid: string): PullRequest[] {
+        const result = this.findByAuthor(userUuid).concat(this.findByReviewer(userUuid));
         return _.uniq(result, (element: PullRequest) => {
             return element.targetRepository.fullName + '#' + element.id;
         });
